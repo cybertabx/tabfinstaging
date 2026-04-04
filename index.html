@@ -63,7 +63,7 @@ OneSignalDeferred.push(async function(OneSignal) {
 <meta name="apple-mobile-web-app-title" content="TabFin">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',Arial,sans-serif;background:#f0f2f5;color:#222;font-size:14px;overflow-x:hidden}
+html,body{width:100%;min-height:100vh;}body{font-family:'Inter',Arial,sans-serif;background:#f0f2f5;color:#222;font-size:14px;overflow-x:hidden}
 .topbar{background:#1a1a2e;color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center}
 .topbar h1{font-size:17px;font-weight:700}
 .topbar p{font-size:11px;color:#aaa;margin-top:2px}
@@ -74,7 +74,7 @@ body{font-family:'Inter',Arial,sans-serif;background:#f0f2f5;color:#222;font-siz
 .tab{padding:11px 13px;font-size:12px;cursor:pointer;border:none;background:none;color:#666;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;flex-shrink:0;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0.1)}
 .tab.active{color:#1a1a2e;border-bottom:2px solid #0ff4c6;font-weight:700}
 
-.page{display:none;padding:18px 22px;max-width:1100px;width:100%;box-sizing:border-box}
+.page{display:none;padding:18px 22px;max-width:1100px;width:100%;box-sizing:border-box;min-height:calc(100vh - 120px)}
 .page.active{display:block!important}
 .g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
 .dash-tiles-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:14px}
@@ -413,13 +413,19 @@ td select{width:100%;padding:3px 5px;border:1px solid #ddd;border-radius:5px;fon
 <!-- OneSignal Web Push SDK -->
 <!-- OneSignal init above in <head> -->>
 <style>
-/* Hide any OneSignal injected UI on non-production domains */
+/* Hide ALL OneSignal injected UI elements */
 #onesignal-slidedown-container,
+#onesignal-slidedown-dialog,
 #onesignal-popover-container,
 .onesignal-bell-container,
 #onesignal-bell-container,
-.onesignal-reset {
+.onesignal-reset,
+#onesignal-notifications-whitelist-dialog,
+div[id^="onesignal"] {
   display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
 }
 </style>
 </head>
@@ -457,7 +463,7 @@ td select{width:100%;padding:3px 5px;border:1px solid #ddd;border-radius:5px;fon
     <div class="gate-note">No spam. We only use this to keep you updated on TabFin.</div>
   </div>
 </div>
-<div style="position:sticky;top:0;z-index:100">
+<div style="position:sticky;top:0;z-index:100;width:100%;">
 <div class="topbar">
   <!-- Left: TabFin product identity -->
   <a href="https://cybertabx.com" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:14px;text-decoration:none">
