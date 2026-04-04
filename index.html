@@ -37,7 +37,7 @@ OneSignalDeferred.push(async function(OneSignal) {
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>TabFin — Financial Control · CyberTabX</title>
 <!-- Google Analytics GA4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8TDCEJSCVL"></script>
@@ -64,6 +64,13 @@ OneSignalDeferred.push(async function(OneSignal) {
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;min-height:100vh;}body{font-family:'Inter',Arial,sans-serif;background:#f0f2f5;color:#222;font-size:14px;overflow-x:hidden}
+/* Prevent iOS auto-zoom on input focus - all inputs must be >= 16px */
+@media screen and (-webkit-min-device-pixel-ratio:0){
+  input[type="text"],input[type="number"],input[type="email"],
+  input[type="tel"],input[type="search"],select,textarea{
+    font-size:16px !important;
+  }
+}
 .topbar{background:#1a1a2e;color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center}
 .topbar h1{font-size:17px;font-weight:700}
 .topbar p{font-size:11px;color:#aaa;margin-top:2px}
@@ -323,7 +330,7 @@ td select{width:100%;padding:3px 5px;border:1px solid #ddd;border-radius:5px;fon
 .gate-sub{font-size:13px;color:#556070;margin-bottom:28px;line-height:1.6;}
 .gate-field{margin-bottom:14px;text-align:left;}
 .gate-label{font-size:11px;font-weight:600;color:#556070;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;display:block;}
-.gate-input{width:100%;padding:12px 16px;border-radius:10px;border:1px solid #2a3444;background:#0d1117;color:#fff;font-size:14px;font-family:'Inter',Arial,sans-serif;outline:none;transition:border-color 0.2s;}
+.gate-input{width:100%;padding:12px 16px;border-radius:10px;border:1px solid #2a3444;background:#0d1117;color:#fff;font-size:16px;font-family:'Inter',Arial,sans-serif;outline:none;transition:border-color 0.2s;}
 .gate-input:focus{border-color:#4f8ef7;}
 .gate-input::placeholder{color:#3a4454;}
 .gate-btn{width:100%;padding:14px;border-radius:10px;border:none;background:#4f8ef7;color:#fff;font-size:14px;font-weight:700;font-family:'Inter',Arial,sans-serif;cursor:pointer;margin-top:8px;transition:background 0.2s;}
@@ -6144,19 +6151,41 @@ function _dismissGate(name,email){
   localStorage.setItem('tabfin-user-registered',JSON.stringify({
     name:name||'',email:email||'',date:new Date().toISOString()
   }));
+  // Blur all inputs immediately — releases iOS zoom lock before animation
+  document.querySelectorAll('input,textarea,select').forEach(function(el){ el.blur(); });
+  // Reset viewport scale immediately
+  var vp=document.querySelector('meta[name=viewport]');
+  if(vp){
+    vp.setAttribute('content','width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no');
+    setTimeout(function(){
+      vp.setAttribute('content','width=device-width,initial-scale=1,minimum-scale=1');
+    },500);
+  }
   var gate=document.getElementById('gateOverlay');
   if(gate){
     gate.style.transition='opacity 0.3s';
     gate.style.opacity='0';
     setTimeout(function(){
       gate.style.display='none';
-      // Show demo mode
+      // Reset mobile zoom after gate dismissal
+      var mv=document.querySelector('meta[name=viewport]');
+      if(mv){ mv.content='width=device-width,initial-scale=1.0,maximum-scale=1.0,viewport-fit=cover';
+        setTimeout(function(){ mv.content='width=device-width,initial-scale=1.0,viewport-fit=cover'; },300); }
       showDemoBanner();
     }, 300);
   }
 }
 
 function skipGate(){
+  // Blur inputs and reset zoom before animating
+  document.querySelectorAll('input,textarea,select').forEach(function(el){ el.blur(); });
+  var vp=document.querySelector('meta[name=viewport]');
+  if(vp){
+    vp.setAttribute('content','width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no');
+    setTimeout(function(){
+      vp.setAttribute('content','width=device-width,initial-scale=1,minimum-scale=1');
+    },500);
+  }
   var gate=document.getElementById('gateOverlay');
   if(gate){
     gate.style.transition='opacity 0.3s';
