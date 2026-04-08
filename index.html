@@ -86,7 +86,7 @@ html,body{width:100%;min-height:100vh;}body{font-family:'Inter',Arial,sans-serif
 .g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
 .dash-tiles-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:14px}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
-.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
 .g2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
 
 /* ── Tablet ── */
@@ -101,6 +101,8 @@ html,body{width:100%;min-height:100vh;}body{font-family:'Inter',Arial,sans-serif
   /* Layout */
   .g5,.g4,.g3,.g2{grid-template-columns:1fr}
   .dash-tiles-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  /* Hide hamburger on mobile — More drawer replaces it */
+  .hamburger-btn{display:none!important}
   .page{padding:10px 12px}
 
   /* Topbar — compress, hide CyberTabX logo */
@@ -2253,7 +2255,7 @@ function goalTypeFields(g){
       '<div><label>Months to cover</label><input type="number" value="'+(g.months||5)+'" oninput="goals.find(function(x){return x.id===\''+g.id+'\';}). months=parseFloat(this.value)||5;rcDebounced()"></div>'+
       '<div><label>Monthly Contribution (AED)</label><input type="number" value="'+g.monthly+'" oninput="updateGoalField(\''+g.id+'\',\'monthly\',this.value)"></div>'+
       '<div><label>Current Balance (AED)</label><input type="number" value="'+g.current+'" oninput="updateGoalField(\''+g.id+'\',\'current\',this.value)"></div>'+
-      '</div>'+drow('Target ('+Math.round(g.months||5)+'× expense)',fmtA(tgt))+drow('Current',fmtA(g.current))+drow('Progress',fmtP(pct),pCol(pct))+drow('Months to complete',g.monthly>0?mo.toFixed(1)+' mo':'—');
+      '</div>'+drow('Target ('+Math.round(g.months||5)+'× expense)',fmtA(tgt))+drow('Current',fmtA(g.current))+drow('Progress',fmtP(pct),pCol(pct))+drow('Months to complete',g.monthly>0?(mo<=0?'<span style="color:#16a34a;font-weight:700">✓ Funded</span>':mo.toFixed(1)+' mo'):'—');
   } else if(g.type==='trip'){
     var ann=g.target*(g.tripsPerYear||1),moN=ann/12,pct=g.target>0?g.current/g.target:0;
     html='<div class="g3">'+
@@ -2288,7 +2290,7 @@ function goalTypeFields(g){
       '<div><label>Target (AED)</label><input type="number" value="'+g.target+'" oninput="updateGoalField(\''+g.id+'\',\'target\',this.value)"></div>'+
       '<div><label>Monthly (AED)</label><input type="number" value="'+g.monthly+'" oninput="updateGoalField(\''+g.id+'\',\'monthly\',this.value)"></div>'+
       '<div><label>Current Balance (AED)</label><input type="number" value="'+g.current+'" oninput="updateGoalField(\''+g.id+'\',\'current\',this.value)"></div>'+
-      '</div>'+drow('Target',fmtA(g.target))+drow('Current',fmtA(g.current))+drow('Progress',fmtP(pct),pCol(pct))+drow('Months to complete',g.monthly>0?mo.toFixed(1)+' mo':'—');
+      '</div>'+drow('Target',fmtA(g.target))+drow('Current',fmtA(g.current))+drow('Progress',fmtP(pct),pCol(pct))+drow('Months to complete',g.monthly>0?(mo<=0?'<span style="color:#16a34a;font-weight:700">✓ Funded</span>':mo.toFixed(1)+' mo'):'—');
   }
 
   // ── Linked investments strip ─────────────────────────────────
@@ -6758,8 +6760,11 @@ function skipGate(){
   <button class="bn-item" id="bn-log" onclick="bnGoTab('inputs')">
     <div id="bn-dot-log" class="bn-dot bn-dot-pending" style="display:none"></div>
     <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 20h9"/>
-      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+      <line x1="16" y1="2" x2="16" y2="6"/>
+      <line x1="8" y1="2" x2="8" y2="6"/>
+      <line x1="3" y1="10" x2="21" y2="10"/>
+      <path d="M9 16l1.5 1.5L14 14"/>
     </svg>
     <span class="bn-label">Log</span>
   </button>
@@ -6768,12 +6773,11 @@ function skipGate(){
   <button class="bn-item" id="bn-funds" onclick="bnGoTab('balances')">
     <div id="bn-dot-funds" class="bn-dot bn-dot-pending" style="display:none"></div>
     <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="8" y1="6" x2="21" y2="6"/>
-      <line x1="8" y1="12" x2="21" y2="12"/>
-      <line x1="8" y1="18" x2="16" y2="18"/>
-      <line x1="3" y1="6" x2="3.01" y2="6"/>
-      <line x1="3" y1="12" x2="3.01" y2="12"/>
-      <line x1="3" y1="18" x2="3.01" y2="18"/>
+      <path d="M20 12V22H4V12"/>
+      <path d="M22 7H2v5h20V7z"/>
+      <path d="M12 22V7"/>
+      <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+      <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
     </svg>
     <span class="bn-label">Funds</span>
   </button>
@@ -6791,9 +6795,10 @@ function skipGate(){
   <!-- More -->
   <button class="bn-item" id="bn-more" onclick="bnOpenDrawer()">
     <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="5" r="1" fill="#888"/>
-      <circle cx="12" cy="12" r="1" fill="#888"/>
-      <circle cx="12" cy="19" r="1" fill="#888"/>
+      <rect x="3" y="3" width="7" height="7" rx="1"/>
+      <rect x="14" y="3" width="7" height="7" rx="1"/>
+      <rect x="3" y="14" width="7" height="7" rx="1"/>
+      <rect x="14" y="14" width="7" height="7" rx="1"/>
     </svg>
     <span class="bn-label">More</span>
   </button>
