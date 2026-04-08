@@ -81,7 +81,7 @@ html,body{width:100%;min-height:100vh;}body{font-family:'Inter',Arial,sans-serif
 .tab{padding:11px 13px;font-size:12px;cursor:pointer;border:none;background:none;color:#666;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;flex-shrink:0;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0.1)}
 .tab.active{color:#1a1a2e;border-bottom:2px solid #0ff4c6;font-weight:700}
 
-.page{display:none;padding:18px 22px;max-width:1100px;width:100%;box-sizing:border-box;min-height:calc(100vh - 120px)}
+.page{display:none;padding:18px 22px;max-width:1100px;width:100%;box-sizing:border-box;min-height:calc(100vh - 120px);overflow-x:hidden}
 .page.active{display:block!important}
 .g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
 .dash-tiles-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:14px}
@@ -142,8 +142,8 @@ html,body{width:100%;min-height:100vh;}body{font-family:'Inter',Arial,sans-serif
   #dash-month-bar select{font-size:12px;padding:4px 6px}
 
   /* Editable rows — stack name/value vertically */
-  .er{grid-template-columns:22px 1fr 36px;grid-template-rows:auto auto;gap:5px}
-  .er input[type=number]{grid-column:2}
+  .er{display:grid;grid-template-columns:24px 1fr 36px;grid-template-rows:auto auto;gap:5px 7px;align-items:start;margin-bottom:8px}
+  .er input[type=number]{grid-column:2;grid-row:2}
   .er .db{grid-row:1;grid-column:3;align-self:center}
 
   /* Input fields — bigger tap targets */
@@ -297,7 +297,7 @@ td select{width:100%;padding:3px 5px;border:1px solid #ddd;border-radius:5px;fon
 .cc-arrow{font-size:11px;color:#aaa;transition:transform .2s;display:inline-block}
 .cc-body{overflow:hidden;transition:max-height .3s ease}
 /* Editable input rows */
-.er{display:grid;grid-template-columns:24px 1fr 1fr 36px;gap:7px;align-items:center;margin-bottom:8px}
+.er{display:grid;grid-template-columns:24px 1fr 36px;grid-template-rows:auto auto;gap:5px 7px;align-items:center;margin-bottom:8px}
 .er input[type=text]{font-size:12px}
 .er input[type=number]{font-size:12px}
 /* Month selector bar */
@@ -400,7 +400,7 @@ td select{width:100%;padding:3px 5px;border:1px solid #ddd;border-radius:5px;fon
 #ob-finish-btn-strip:hover{color:#4f8ef7;}
 
 /* Guided headers */
-.ob-guide-header{background:#fff;border:1px solid #e5e5e5;border-left:3px solid #4f8ef7;border-radius:10px;padding:14px 16px;margin-bottom:14px;}
+.ob-guide-header{background:#fff;border:1px solid #e5e5e5;border-left:3px solid #4f8ef7;border-radius:10px;padding:10px 12px;margin-bottom:14px;}
 .ob-guide-step-label{font-size:10px;font-weight:700;color:#4f8ef7;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
 .ob-guide-title{font-size:17px;font-weight:700;color:#1a1a2e;margin-bottom:3px;}
 .ob-guide-sub{font-size:12px;color:#666;margin-bottom:10px;line-height:1.5;}
@@ -2126,7 +2126,7 @@ function renderSection(containerId,arr,updateFn,deleteFn,totId,isIncome){
         (containerId==='income-rows'?'e.g. Salary, Rental Income...':
          containerId==='fixed-rows'?'e.g. Rent, Insurance, Loan...':
          'e.g. Groceries, Dining, Fuel...')+
-        '" oninput="'+updateFn+'('+i+',\'name\',this.value)" style="'+(on?'':'color:#aaa;text-decoration:line-through')+'">'+
+        '" oninput="'+updateFn+'('+i+',\'name\',this.value)" style="width:100%;min-width:0;'+(on?'':'color:#aaa;text-decoration:line-through')+'">'+
       '<input type="number" data-val="1" value="'+r.val+'" oninput="'+updateFn+'('+i+',\'val\',this.value);updateSectionTotals();rc()" style="'+(on?'':'color:#aaa')+'">'+
       '<button class="db" onclick="'+deleteFn+'('+i+')">×</button>'+
     '</div>';
@@ -3390,6 +3390,7 @@ function bnCloseDrawer(){
   document.getElementById('bn-drawer').classList.remove('open');
   document.getElementById('bn-drawer-backdrop').classList.remove('open');
   document.body.style.overflow = '';
+  document.body.style.overflowX = 'hidden'; // prevent horizontal scroll bleed
 }
 
 function bnUpdateDots(){
@@ -4473,7 +4474,7 @@ function renderSnapshotView(params){
   var invT=traffic(totSIPaed>0&&sipCV>0,totSIPaed>0);
 
   function healthCard(label,value,sub,t,detail){
-    return '<div style="background:'+t.bg+';border:1px solid '+t.bd+';border-radius:10px;padding:14px 16px">'+
+    return '<div style="background:'+t.bg+';border:1px solid '+t.bd+';border-radius:10px;padding:10px 12px">'+
       '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">'+
         '<div style="font-size:11px;font-weight:600;color:'+t.col+';text-transform:uppercase;letter-spacing:.05em">'+label+'</div>'+
         '<div style="width:22px;height:22px;border-radius:50%;background:'+t.col+';color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">'+t.icon+'</div>'+
@@ -4494,7 +4495,7 @@ function renderSnapshotView(params){
     '</div>'+
   '</div>';
 
-  html+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px">'+
+  html+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:14px;min-width:0">'+
     healthCard('Savings Rate',fmtP(sr),'of income saved this month',srT,
       'Saving '+fmtA(sav)+' of '+fmtA(sal)+' income. Target: 30%+')+
     healthCard('Expense Control',fmtA(exp),'total spend this month',expT,
@@ -4539,7 +4540,7 @@ function renderProjectionView(params){
     nwYears.push({yr:y,val:Math.round(nwReal*Math.pow(1.08,y)+fvCalc(totInv,0.08/12,y*12))});
   }
   var maxNW=nwYears[19].val||1;
-  html+='<div style="display:flex;align-items:flex-end;gap:4px;height:140px;padding-bottom:20px;position:relative">';
+  html+='<div style="overflow-x:auto;-webkit-overflow-scrolling:touch">'+'<div style="display:flex;align-items:flex-end;gap:4px;height:140px;padding-bottom:20px;position:relative;min-width:520px">';
   nwYears.forEach(function(row){
     var h=Math.round(row.val/maxNW*120);
     var isMile=row.yr%5===0;
@@ -4549,7 +4550,7 @@ function renderProjectionView(params){
       '<div style="font-size:9px;color:'+(isMile?'#1d4ed8':'#888')+';font-weight:'+(isMile?'700':'400')+'">Y'+row.yr+'</div>'+
     '</div>';
   });
-  html+='</div></div>';
+  html+='</div></div></div>';
 
   // FIRE timeline
   var fireYr=null;
