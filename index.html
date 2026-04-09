@@ -284,7 +284,11 @@ td select{width:100%;padding:3px 5px;border:1px solid #ddd;border-radius:5px;fon
 .bg{background:#dcfce7;color:#15803d}.bb{background:#dbeafe;color:#1d4ed8}.ba{background:#fef3c7;color:#b45309}.bp{background:#fce7f3;color:#9d174d}
 .note{font-size:11px;color:#777;background:#f8f8f8;border-radius:5px;padding:7px 10px;margin-top:8px;border-left:3px solid #1a1a2e}
 .gc{background:#fff;border-radius:10px;padding:14px 18px;box-shadow:0 1px 4px rgba(0,0,0,.07);margin-bottom:12px;border-left:4px solid #1a1a2e;position:relative}
-.gch{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.gch{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.gch-row1{display:flex;align-items:center;gap:8px;width:100%}
+.gch-row1 input[type=text]{flex:1;min-width:0;font-size:13px;font-weight:600;padding:6px 10px;border:1.5px solid #e5e5e5;border-radius:7px;background:#f8f9ff;color:#1a1a2e}
+.gch-row1 input[type=text]:focus{border-color:#4f8ef7;outline:none;background:#fff}
+.gch-row2{display:flex;align-items:center;gap:10px;padding-left:0}
 .gch input[type=text]{font-size:14px;font-weight:700;border:none;border-bottom:2px dashed #ddd;border-radius:0;padding:2px 4px;color:#1a1a2e;background:transparent;flex:1}
 .gch input[type=text]:focus{outline:none;border-bottom:2px solid #1a1a2e}
 .gcd{background:none;border:none;color:#ccc;cursor:pointer;font-size:19px;line-height:1;padding:0;margin-left:auto}
@@ -2344,14 +2348,18 @@ function renderGoals(){
     var on=g.enabled!==false;
     html+='<div class="gc" style="border-left-color:'+col+';opacity:'+(on?1:0.5)+'">'+
       '<div class="gch">'+
-        '<span style="color:'+col+';font-size:16px;font-weight:700">#'+(i+1)+'</span>'+
-        '<input type="text" value="'+escHtml(g.name)+'" oninput="renameGoal(\''+g.id+'\',this.value)">'+
-        '<select style="width:auto;padding:4px 8px;font-size:12px;border-radius:6px;border:1px solid #ddd" onchange="updateGoalType(\''+g.id+'\',this.value)">'+opts+'</select>'+
-        '<label style="display:flex;align-items:center;gap:5px;font-size:11px;color:#666;cursor:pointer;margin:0;font-weight:400" title="'+(on?'Active':'Paused — not counted in calculations')+'">'+
-          '<input type="checkbox" '+(on?'checked':'')+' onchange="goals.find(function(x){return x.id===\''+g.id+'\';}).enabled=this.checked;rc()" style="width:auto;cursor:pointer">'+
-          (on?'Active':'Paused')+
-        '</label>'+
-        '<button class="gcd" onclick="deleteGoal(\''+g.id+'\')">×</button>'+
+        '<div class="gch-row1">'+
+          '<span style="color:'+col+';font-size:16px;font-weight:700;flex-shrink:0">#'+(i+1)+'</span>'+
+          '<input type="text" value="'+escHtml(g.name)+'" placeholder="Goal name" oninput="renameGoal(\''+g.id+'\',this.value)" style="flex:1;min-width:0">'+
+          '<button class="gcd" onclick="deleteGoal(\''+g.id+'\')" style="flex-shrink:0">×</button>'+
+        '</div>'+
+        '<div class="gch-row2">'+
+          '<select style="padding:4px 8px;font-size:12px;border-radius:6px;border:1px solid #ddd;flex-shrink:0" onchange="updateGoalType(\''+g.id+'\',this.value)">'+opts+'</select>'+
+          '<label style="display:flex;align-items:center;gap:5px;font-size:11px;color:#666;cursor:pointer;margin:0;font-weight:400" title="'+(on?'Active':'Paused — not counted in calculations')+'">'+
+            '<input type="checkbox" '+(on?'checked':'')+' onchange="goals.find(function(x){return x.id===\''+g.id+'\';}).enabled=this.checked;rc()" style="width:auto;cursor:pointer">'+
+            (on?'Active':'Paused')+
+          '</label>'+
+        '</div>'+
       '</div>'+
       '<div>'+goalTypeFields(g)+'</div>'+
     '</div>';
