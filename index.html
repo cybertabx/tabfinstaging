@@ -63,7 +63,8 @@ OneSignalDeferred.push(async function(OneSignal) {
 <meta name="apple-mobile-web-app-title" content="TabFin">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;min-height:100vh;}body{font-family:'Inter',Arial,sans-serif;background:#f0f2f5;color:#222;font-size:14px;overflow-x:hidden}
+html,body{width:100%;min-height:100vh;}
+body{font-family:'Inter',Arial,sans-serif;background:#f0f2f5;color:#222;font-size:14px;overflow-x:hidden}
 /* Prevent iOS auto-zoom on input focus - all inputs must be >= 16px */
 @media screen and (-webkit-min-device-pixel-ratio:0){
   input[type="text"],input[type="number"],input[type="email"],
@@ -76,7 +77,7 @@ html,body{width:100%;min-height:100vh;}body{font-family:'Inter',Arial,sans-serif
 .topbar p{font-size:11px;color:#aaa;margin-top:2px}
 
 /* ── Tab bar — horizontal scroll on mobile ── */
-.tabs{display:flex;background:#fff;border-bottom:2px solid #e5e5e5;padding:0 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-shrink:0}
+.tabs{display:flex;background:#fff;border-bottom:2px solid #e5e5e5;padding:0 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;max-width:100%;scrollbar-width:none;flex-shrink:0}
 .tabs::-webkit-scrollbar{display:none}
 .tab{padding:11px 13px;font-size:12px;cursor:pointer;border:none;background:none;color:#666;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;flex-shrink:0;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0.1)}
 .tab.active{color:#1a1a2e;border-bottom:2px solid #0ff4c6;font-weight:700}
