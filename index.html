@@ -3850,8 +3850,11 @@ function rc(){
   // Goals tab
   renderGoals();
 
-  // Investments
-  renderInv();
+  // Investments — skip re-render if user is actively typing inside investments tab
+  var _invFocused = document.activeElement &&
+    document.getElementById('investments') &&
+    document.getElementById('investments').contains(document.activeElement);
+  if(!_invFocused) renderInv();
   var ft=document.getElementById('fire-tgt');if(ft) ft.textContent=fmtA(fireTgt);
   var fs=document.getElementById('fire-tgt-sub');if(fs) fs.textContent='Based on '+fm+'× annual expenses';
   var ti=document.getElementById('tot-inv');if(ti) ti.textContent=fmtA(totInv);
