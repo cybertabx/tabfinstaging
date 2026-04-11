@@ -2813,7 +2813,36 @@ function renderInv(){
     });
   });
 
+  // ── Focus restore: save which input is focused before DOM rebuild ──
+  var _focusedInvInput = null;
+  var _focusedInvVal = null;
+  var _focusedInvSel = null;
+  var _ae = document.activeElement;
+  var _invPortEl = document.getElementById('inv-portfolio');
+  if(_ae && _invPortEl && _invPortEl.contains(_ae) && (_ae.tagName==='INPUT'||_ae.tagName==='SELECT')){
+    _focusedInvSel = _ae.getAttribute('oninput') || _ae.getAttribute('onchange') || _ae.placeholder || '';
+    _focusedInvVal = _ae.value;
+    var _selStart = _ae.selectionStart;
+    var _selEnd = _ae.selectionEnd;
+  }
+
   document.getElementById('inv-portfolio').innerHTML=html||'<div style="padding:20px;color:#aaa">No investments. Click "+ Add Investment".</div>';
+
+  // ── Restore focus after rebuild ──
+  if(_focusedInvSel !== null){
+    var _allInputs = document.getElementById('inv-portfolio').querySelectorAll('input,select');
+    for(var _fi=0; _fi<_allInputs.length; _fi++){
+      var _el = _allInputs[_fi];
+      var _elSel = _el.getAttribute('oninput') || _el.getAttribute('onchange') || _el.placeholder || '';
+      if(_elSel === _focusedInvSel){
+        _el.focus();
+        if(_el.type === 'number' || _el.type === 'text'){
+          try{ _el.setSelectionRange(_selStart, _selEnd); }catch(e){}
+        }
+        break;
+      }
+    }
+  }
 
   // FV table
   renderFVTable();
@@ -3850,11 +3879,8 @@ function rc(){
   // Goals tab
   renderGoals();
 
-  // Investments — skip re-render if user is actively typing inside investments tab
-  var _invFocused = document.activeElement &&
-    document.getElementById('investments') &&
-    document.getElementById('investments').contains(document.activeElement);
-  if(!_invFocused) renderInv();
+  // Investments
+  renderInv();
   var ft=document.getElementById('fire-tgt');if(ft) ft.textContent=fmtA(fireTgt);
   var fs=document.getElementById('fire-tgt-sub');if(fs) fs.textContent='Based on '+fm+'× annual expenses';
   var ti=document.getElementById('tot-inv');if(ti) ti.textContent=fmtA(totInv);
