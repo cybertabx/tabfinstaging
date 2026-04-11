@@ -142,7 +142,7 @@ body{font-family:'Inter',Arial,sans-serif;background:#f0f2f5;color:#222;font-siz
   #dash-month-bar{gap:6px;margin-bottom:10px}
   #dash-month-bar select{font-size:12px;padding:4px 6px}
 
-  /* Editable rows — stack name/value vertically */
+  /* Editable rows — stack name/value vertically on mobile */
   .er{display:grid;grid-template-columns:24px 1fr 36px;grid-template-rows:auto auto;gap:5px 7px;align-items:start;margin-bottom:8px}
   .er input[type=number]{grid-column:2;grid-row:2}
   .er .db{grid-row:1;grid-column:3;align-self:center}
@@ -302,9 +302,9 @@ td select{width:100%;padding:3px 5px;border:1px solid #ddd;border-radius:5px;fon
 .cc-arrow{font-size:11px;color:#aaa;transition:transform .2s;display:inline-block}
 .cc-body{overflow:hidden;transition:max-height .3s ease}
 /* Editable input rows */
-.er{display:grid;grid-template-columns:24px 1fr 36px;grid-template-rows:auto auto;gap:5px 7px;align-items:center;margin-bottom:8px}
-.er input[type=text]{font-size:12px}
-.er input[type=number]{font-size:12px}
+.er{display:grid;grid-template-columns:24px 1fr 1fr 36px;gap:7px;align-items:center;margin-bottom:8px}
+.er input[type=text]{font-size:13px}
+.er input[type=number]{font-size:13px}
 /* Month selector bar */
 .mbar{display:flex;align-items:center;gap:10px;background:#fff;border-radius:10px;padding:10px 16px;box-shadow:0 1px 4px rgba(0,0,0,.07);margin-bottom:14px;flex-wrap:wrap}
 .mbar label{margin:0;font-weight:600;color:#1a1a2e;font-size:13px}
